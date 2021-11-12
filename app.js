@@ -11,26 +11,55 @@ function getAddress (node, network) {
 }
 
 const seed = Bip39.mnemonicToSeedSync(seedPhrase);
- 
+const rootIndex = 44;
 const root = Bip32.fromSeed(seed, Bitcoin.networks.bitcoin);
 let progress = 0;
-
-console.log("searching please wait...");
- 
+  
 for(var i = 0;i<depth;i++){
   for(var i2 = 0;i2<depth;i2++){
     for(var i3 = 0;i3<depth;i3++){
-      const child = root.deriveHardened(44).deriveHardened(i).deriveHardened(i2).derive(i3);
+      const child = root.deriveHardened(rootIndex).deriveHardened(i).deriveHardened(i2).derive(i3);
       if(getAddress(child) === addressToFind ){
-        console.log("found at " +i+" "+i2+" "+ i3+" WIF is:"+child.toWIF());
+        process.stdout.write("\n");
+        process.stdout.write("\n");
+        console.log("found WIF is:"+child.toWIF());
         break;
       }
       progress++;
-      console.log((progress / (depth ** 3) * 100) +"% "+ i+" "+i2+" "+ i3);
+      const percentComplete = (progress / (depth ** 3) * 100).toFixed(2);
+
+      process.stdout.write("searching 1/2 " +percentComplete+"% - "+rootIndex+"'/"+ i+"'/"+i2+"'/"+ i3+"\r");
     }
   }
 
 }
+progress = 0;
+process.stdout.write("\n");
+process.stdout.write("\n");
+console.log("not found checking one layer deeper, this will take a while...");
+process.stdout.write("\n");
 
+for(var i = 0;i<depth;i++){
+  for(var i2 = 0;i2<depth;i2++){
+    for(var i3 = 0;i3<depth;i3++){
+      for(var i4 = 0;i4<depth;i4++){
+        const child = root.deriveHardened(rootIndex).deriveHardened(i).deriveHardened(i2).deriveHardened(i3).derive(i4);
+        if(getAddress(child) === addressToFind ){
+          process.stdout.write("\n");
+          process.stdout.write("\n");
+          console.log("found WIF is:"+child.toWIF());
+          break;
+        }
+        progress++;
+        const percentComplete = (progress / (depth ** 4) * 100).toFixed(2);
+
+        process.stdout.write("searching 2/2 " +percentComplete+"% - "+rootIndex+"'/"+ i+"'/"+i2+"'/"+ i3+"'/"+i4+"\r");
+      }
+    }
+  }
+
+}
+process.stdout.write("\n");
+process.stdout.write("\n");
 console.log("not found");
  
