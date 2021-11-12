@@ -19,7 +19,8 @@ for(var i = 0;i<depth;i++){
   for(var i2 = 0;i2<depth;i2++){
     for(var i3 = 0;i3<depth;i3++){
       const child = root.deriveHardened(rootIndex).deriveHardened(i).deriveHardened(i2).derive(i3);
-      if(getAddress(child) === addressToFind ){
+      const address = getAddress(child);
+      if(address === addressToFind ){
         process.stdout.write("\n");
         process.stdout.write("\n");
         console.log("found WIF is:"+child.toWIF());
@@ -28,7 +29,7 @@ for(var i = 0;i<depth;i++){
       progress++;
       const percentComplete = (progress / (depth ** 3) * 100).toFixed(2);
 
-      process.stdout.write("searching 1/2 " +percentComplete+"% - "+rootIndex+"'/"+ i+"'/"+i2+"'/"+ i3+"\r");
+      process.stdout.write("searching 1/2 " +percentComplete+"% - "+rootIndex+"'/"+ i+"'/"+i2+"'/"+ i3+" address - "+address+"\r");
     }
   }
 
