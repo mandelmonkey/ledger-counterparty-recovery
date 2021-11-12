@@ -1,4 +1,4 @@
-A simple and crude ledger/counterpart address recoverytool
+A simple and crude ledger/counterpart address recovery tool
 
 Use the tool to search through your ledger address and try and match a known address,
 
